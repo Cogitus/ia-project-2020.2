@@ -14,7 +14,7 @@ scaler = MinMaxScaler()
 data = pd.read_csv('data_w_genres.csv')
 
 data.drop(['key', 'mode', 'count'], axis=1, inplace=True)
-newData = data[['instrumentalness', 'acousticness', 'danceability', 'genres']]
+newData = data[['instrumentalness', 'acousticness', 'danceability','energy','liveness', 'loudness','genres']]
 
 newData = newData[newData.genres != "[]"]
 newData.reset_index(drop=True, inplace=True)
@@ -45,7 +45,7 @@ for index, row in newData.iterrows():
         
         
 print(rock,rap,jazz,classical)
-filterData = pd.DataFrame(filterDataArray, columns = ['instrumentalness', 'acousticness', 'danceability', 'genres'])
+filterData = pd.DataFrame(filterDataArray, columns = ['instrumentalness', 'acousticness', 'danceability','energy','liveness', 'loudness', 'genres'])
 labelEncoder = LabelEncoder()
 labelEncoder.fit(filterData['genres'])
 filterData['genres'] = labelEncoder.transform(filterData['genres'])
@@ -59,7 +59,7 @@ kmeans = KMeans(n_clusters=4, max_iter=600).fit(X_scaled)
 
 
 filterData['kmeans'] = kmeans.labels_
-filterData.columns = ['instrumentalness', 'acousticness', 'danceability','kmeans']
+filterData.columns = ['instrumentalness', 'acousticness', 'danceability','energy','liveness', 'loudness','kmeans']
 
 fig = px.scatter_3d(filterData, x='instrumentalness', y='acousticness', z='danceability',
               color='kmeans')
@@ -79,25 +79,25 @@ c3.drop(['kmeans'], axis=1, inplace=True)
 x = c0.values #returns a numpy array
 c0_scaled = scaler.fit_transform(x)
 c0 = pd.DataFrame(c0_scaled)
-c0.columns = ['instrumentalness', 'acousticness', 'danceability' ]
+c0.columns = ['instrumentalness', 'acousticness', 'danceability','energy','liveness', 'loudness' ]
 c0=c0.melt(var_name='groups', value_name='rock')
 
 x = c1.values #returns a numpy array
 c1_scaled = scaler.fit_transform(x)
 c1 = pd.DataFrame(c1_scaled)
-c1.columns = ['instrumentalness', 'acousticness', 'danceability' ]
+c1.columns = ['instrumentalness', 'acousticness', 'danceability','energy','liveness', 'loudness' ]
 c1=c1.melt(var_name='groups', value_name='rap')
 
 x = c2.values #returns a numpy array
 c2_scaled = scaler.fit_transform(x)
 c2 = pd.DataFrame(c2_scaled)
-c2.columns = ['instrumentalness', 'acousticness', 'danceability']
+c2.columns = ['instrumentalness', 'acousticness', 'danceability','energy','liveness', 'loudness']
 c2=c2.melt(var_name='groups', value_name='jazz')
 
 x = c3.values #returns a numpy array
 c3_scaled = scaler.fit_transform(x)
 c3 = pd.DataFrame(c3_scaled)
-c3.columns = ['instrumentalness', 'acousticness', 'danceability']
+c3.columns = ['instrumentalness', 'acousticness', 'danceability','energy','liveness', 'loudness']
 c3=c3.melt(var_name='groups', value_name='classical')
 
 
